@@ -1,12 +1,17 @@
 // import { useState } from 'react';
+import { useState } from 'react';
 import './index.css';
 import Contactlist from './layout/contactlist';
 import Form from './layout/form';
 
 function App() {
+  const [contactList, setContactList] = useState<any>([
+    { name: '', surName: '', relation: '', phone: 111, email: '' },
+  ]);
+
   return (
     <div className="bg-red-200">
-      <Form/>
+      <Form setContactList={setContactList} contactList={contactList} />
       <Contactlist />
     </div>
   );
