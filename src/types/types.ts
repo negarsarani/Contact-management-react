@@ -8,11 +8,13 @@ export interface input {
   placeholder: string;
   type: string;
   value: string;
-  onChange: (x: string) => void;
+  name: string;
+  setFormObj: any;
+  Validation?:any
 }
 export interface formType {
   name: string;
-  surName: string;
+  lastName: string;
   relation: string;
   phone: number;
   email: string;
