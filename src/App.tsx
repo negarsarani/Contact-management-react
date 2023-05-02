@@ -5,9 +5,7 @@ import Contactlist from './layout/contactlist';
 import Form from './layout/form';
 
 function App() {
-  const [contactList, setContactList] = useState<any>([
-    { name: '', surName: '', relation: '', phone: 111, email: '' },
-  ]);
+  const [contactList, setContactList] = useState<any>([]);
 
   return (
     <div className="bg-red-200">

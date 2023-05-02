@@ -13,10 +13,10 @@ export interface input {
   Validation?:any
 }
 export interface formType {
-  name: string;
+  firstName: string;
   lastName: string;
   relation: string;
-  phone: number;
+  phone: number | string;
   email: string;
 }
 // export interface ContactListState {

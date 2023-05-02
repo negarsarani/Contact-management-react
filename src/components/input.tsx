@@ -1,4 +1,4 @@
-import { input } from '../types/types';
+import { formType, input } from '../types/types';
 
 const Input = ({
   placeholder,
@@ -14,13 +14,13 @@ const Input = ({
       placeholder={placeholder}
       value={value}
       onChange={(e) =>
-        setFormObj((prev) => {
+        setFormObj((prev : formType) => {
           prev[name] = e.target.value;
           return { ...prev };
         })
       }
-      onBlur={Validation}
-      onKeyDown={Validation}
+      onBlur={()=>Validation(name)}
+      onKeyUp={()=>Validation(name)}
       name={name}
       className="border text-black border-black "
     ></input>
