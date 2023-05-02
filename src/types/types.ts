@@ -15,6 +15,7 @@ export interface input {
   style?: string;
 }
 export interface formType {
+  id?:number 
   firstName: string;
   lastName: string;
   relation: string;

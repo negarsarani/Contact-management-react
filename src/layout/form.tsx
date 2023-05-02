@@ -13,13 +13,13 @@ function Form({ setContactList, contactList }: any) {
   });
   const [isvalid, setIsvalid] = useState<boolean>(false);
   const [formObj, setFormObj] = useState<formType>({
+    id: Date.now(),
     firstName: '',
     lastName: '',
     relation: '',
     phone: '',
     email: '',
   });
-
   const Validation = (item) => {
     const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const regexPhone = /09\d{8}$/;
@@ -86,11 +86,12 @@ function Form({ setContactList, contactList }: any) {
       }
     });
   };
+
   return (
-    <div className='w-full flex flex-col items-center justify-center'>
+    <div className="w-full flex flex-col items-center justify-center">
       <form
         action=""
-        className="flex flex-col gap-4 items-center justify-center w-9/12 md:w-6/12"
+        className="flex flex-col gap-4 items-center justify-center w-9/12 md:w-6/12 xl:w-4/12"
       >
         <div className="flex flex-col w-full">
           <Input
@@ -137,15 +138,15 @@ function Form({ setContactList, contactList }: any) {
             name=""
             id=""
             placeholder="نسبت"
-            className="text-gray-400 w-full border border-black py-[.2rem] rounded-sm px-1 "
+            className="text-gray-400 w-full border border-black py-[.5rem] rounded-sm px-1 "
           >
             <option value="" disabled>
               نسبت
             </option>
-            <option value="family1">اعضای خانواده</option>
-            <option value="friend">دوست</option>
-            <option value="coworker">همکار</option>
-            <option value="family2">فامیل</option>
+            <option value="خانواده">اعضای خانواده</option>
+            <option value="دوست">دوست</option>
+            <option value="همکار">همکار</option>
+            <option value="فامیل">فامیل</option>
           </select>
           <span className="text-black">{err.relation}</span>
         </div>
@@ -168,11 +169,19 @@ function Form({ setContactList, contactList }: any) {
           type="submit"
           onClick={(e) => {
             e.preventDefault();
-            isvalid
-              ? setContactList(() => {
-                  return [...contactList, { ...formObj }];
-                })
-              : 'the field is wrong';
+            if (isvalid) {
+              setContactList(() => {
+                return [...contactList, { ...formObj }];
+              });
+              setFormObj({
+                id: Date.now(),
+                firstName: '',
+                lastName: '',
+                relation: '',
+                phone: '',
+                email: '',
+              });
+            }
           }}
         >
           Add to my contact

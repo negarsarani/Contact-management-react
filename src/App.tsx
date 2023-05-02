@@ -5,12 +5,12 @@ import Contactlist from './layout/contactlist';
 import Form from './layout/form';
 
 function App() {
-  const [contactList, setContactList] = useState<any>([]);
+  const [contactList, setContactList] = useState<[]>([]);
 
   return (
-    <div className="bg-red-200 flex flex-col  items-center justify-center py-10 gap-10 flex-row-reverse	">
+    <div className="flex flex-col  items-center justify-center py-10 gap-10 flex-row-reverse relative	">
       <Form setContactList={setContactList} contactList={contactList} />
-      <Contactlist />
+      <Contactlist contactList={contactList} setContactList={setContactList}/>
     </div>
   );
 }
