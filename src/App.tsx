@@ -8,7 +8,7 @@ function App() {
   const [contactList, setContactList] = useState<any>([]);
 
   return (
-    <div className="bg-red-200">
+    <div className="bg-red-200 flex flex-col  items-center justify-center py-10 gap-10 flex-row-reverse	">
       <Form setContactList={setContactList} contactList={contactList} />
       <Contactlist />
     </div>

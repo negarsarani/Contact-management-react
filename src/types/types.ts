@@ -1,7 +1,8 @@
-export type Button = {
+export type Buttontype = {
   children: string | React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   style?: string;
+  type?: string;
 };
 
 export interface input {
@@ -11,6 +12,7 @@ export interface input {
   name: string;
   setFormObj: any;
   Validation?:any
+  style?: string;
 }
 export interface formType {
   firstName: string;

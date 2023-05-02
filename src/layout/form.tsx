@@ -1,9 +1,16 @@
 import { useState } from 'react';
 import Input from '../components/input';
 import { formType } from '../types/types';
+import Button from '../components/button';
 
 function Form({ setContactList, contactList }: any) {
-  const [err, setErr] = useState<formType>({});
+  const [err, setErr] = useState<formType>({
+    firstName: '',
+    lastName: '',
+    relation: '',
+    phone: '',
+    email: '',
+  });
   const [isvalid, setIsvalid] = useState<boolean>(false);
   const [formObj, setFormObj] = useState<formType>({
     firstName: '',
@@ -80,9 +87,12 @@ function Form({ setContactList, contactList }: any) {
     });
   };
   return (
-    <div>
-      <form action="" className="flex flex-col">
-        <div>
+    <div className='w-full flex flex-col items-center justify-center'>
+      <form
+        action=""
+        className="flex flex-col gap-4 items-center justify-center w-9/12 md:w-6/12"
+      >
+        <div className="flex flex-col w-full">
           <Input
             placeholder="نام..."
             value={formObj.firstName}
@@ -91,11 +101,11 @@ function Form({ setContactList, contactList }: any) {
             name={'firstName'}
             Validation={Validation}
           />
-          <span className="text-black">{err.firstName}</span>
+          <span className="text-black">{err.firstName} </span>
         </div>
-        <div>
+        <div className="flex flex-col w-full">
           <Input
-            placeholder="نام خانوادگی"
+            placeholder="نام خانوادگی..."
             value={formObj.lastName}
             setFormObj={setFormObj}
             type="text"
@@ -104,7 +114,7 @@ function Form({ setContactList, contactList }: any) {
           />
           <span className="text-black">{err.lastName}</span>
         </div>
-        <div>
+        <div className="flex flex-col w-full">
           <Input
             placeholder="شماره تماس..."
             value={formObj.phone}
@@ -115,7 +125,7 @@ function Form({ setContactList, contactList }: any) {
           />
           <span className="text-black">{err.phone}</span>
         </div>
-        <div>
+        <div className="flex flex-col w-full">
           <select
             value={formObj.relation}
             onChange={(e) =>
@@ -127,7 +137,7 @@ function Form({ setContactList, contactList }: any) {
             name=""
             id=""
             placeholder="نسبت"
-            className="text-gray-400"
+            className="text-gray-400 w-full border border-black py-[.2rem] rounded-sm px-1 "
           >
             <option value="" disabled>
               نسبت
@@ -138,8 +148,9 @@ function Form({ setContactList, contactList }: any) {
             <option value="family2">فامیل</option>
           </select>
           <span className="text-black">{err.relation}</span>
+        </div>
 
-          <div></div>
+        <div className="flex flex-col w-full">
           <Input
             placeholder="ایمیل"
             value={formObj.email}
@@ -148,9 +159,12 @@ function Form({ setContactList, contactList }: any) {
             name={'email'}
             Validation={Validation}
           />
-          <span className="text-black">{err.email}</span>
         </div>
-        <button
+        <span className="text-black">{err.email}</span>
+        <Button
+          style={`${
+            isvalid ? ` bg-violet-500 text-white` : `bg-gray-400 text-black`
+          }  rounded-md p-2 w-40`}
           type="submit"
           onClick={(e) => {
             e.preventDefault();
@@ -161,8 +175,8 @@ function Form({ setContactList, contactList }: any) {
               : 'the field is wrong';
           }}
         >
-          add
-        </button>
+          Add to my contact
+        </Button>
       </form>
     </div>
   );
