@@ -20,9 +20,8 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
     phone: '',
     email: '',
   });
-  const [activeObj, setActiveObj] = useState<any>({});  
+  const [activeObj, setActiveObj] = useState<any>({});
   useEffect(() => {
-    
     if (edit.flag) {
       setActiveObj(() => {
         return {
@@ -100,7 +99,7 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
 
         break;
       case 'relation':
-        if (object.relation.trim() === '' || object.relation === 'نسبت' ) {
+        if (object.relation.trim() === '' || object.relation === 'نسبت') {
           err.relation = 'لطفا یکی از گزینه ها را انتخاب کنید';
         } else {
           err.relation = '';
@@ -133,17 +132,19 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
   };
 
   const handleEdit = () => {
-    // const editarr = contactList.map((item: formType) => {
-    //   if (item.id === formObj.id) {
-    //     item = formObj;
-    //   }
-    // });
-    // setContactList(() => [...editarr]);
-    // SetEdit((prev: any) => {
-    //   prev.flag = false;
-    //   prev.item = {};
-    //   return { ...prev };
-    // });
+    const editarr = contactList.map((item: formType) => {
+      if (item.id === activeObj.id) {
+        item = activeObj;
+      }
+      return item;
+    });
+
+    setContactList(() => editarr);
+    SetEdit((prev: any) => {
+      prev.flag = false;
+      prev.item = {};
+      return { ...prev };
+    });
   };
 
   return (
@@ -162,7 +163,6 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
             type="text"
             name={'firstName'}
             Validation={Validation}
-            
           />
           <span className="text-black">{err.firstName} </span>
         </div>
@@ -195,23 +195,18 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
         <div className="flex flex-col w-full">
           <select
             value={edit.flag ? activeObj.relation : formObj.relation}
-            onChange={
-              (e) => {
-                if (edit.flag) {
-                  setActiveObj((prev) => {
-                    prev.relation = e.target.value;
-                    return { ...prev };
-                  });
-                } else {
-                  setFormObj((prev: formType) => {
-                    return { ...prev, relation: e.target.value };
-                  });
-                }
+            onChange={(e) => {
+              if (edit.flag) {
+                setActiveObj((prev) => {
+                  prev.relation = e.target.value;
+                  return { ...prev };
+                });
+              } else {
+                setFormObj((prev: formType) => {
+                  return { ...prev, relation: e.target.value };
+                });
               }
-              // setFormObj((prev) => {
-              //   return { ...prev, relation: e.target.value };
-              // })
-            }
+            }}
             onClick={Validation}
             name=""
             id=""
@@ -259,28 +254,26 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
               }
             }
 
-            // if (edit.flag) {
-            //   handleEdit();
-            // }
-            // else {
-            if (isvalid) {
-              setContactList(() => {
-                return [...contactList, { ...formObj }];
-              });
-              setFormObj({
-                id: Date.now(),
-                firstName: '',
-                lastName: '',
-                relation: '',
-                phone: '',
-                email: '',
-              });
-              setIsvalid(false);
+            if (edit.flag) {
+              handleEdit();
             } else {
-              alert('error');
+              if (isvalid) {
+                setContactList(() => {
+                  return [...contactList, { ...formObj }];
+                });
+                setFormObj({
+                  id: Date.now(),
+                  firstName: '',
+                  lastName: '',
+                  relation: '',
+                  phone: '',
+                  email: '',
+                });
+                setIsvalid(false);
+              } else {
+                alert('error');
+              }
             }
-            // }
-            //
           }}
         >
           {edit.flag ? 'ثبت ویرایش' : 'ثبت مخاطب جدید'}
