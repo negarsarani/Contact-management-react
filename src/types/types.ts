@@ -11,18 +11,34 @@ export interface input {
   value: string;
   name: string;
   setFormObj: any;
-  Validation?:any
+  Validation?: any;
   style?: string;
 }
 export interface formType {
-  id?:number 
+  id?: number;
+  firstName: string;
+  lastName: string;
+  relation: string;
+  phone: number | string;
+  email: string;
+  isEdit: boolean;
+}
+export interface error {
+  id?: number;
   firstName: string;
   lastName: string;
   relation: string;
   phone: number | string;
   email: string;
 }
+
+
 // export interface ContactListState {
 //   contactList: formType[];
 //   setContactList: React.Dispatch<React.SetStateAction<formType[]>>;
 // }
+export type contactlist = {
+  contactList: any;
+  setContactList: React.Dispatch<React.SetStateAction<[]>>;
+  SetEdit: React.Dispatch<React.SetStateAction<formType>> | any;
+};

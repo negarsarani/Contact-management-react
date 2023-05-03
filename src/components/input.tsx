@@ -23,7 +23,7 @@ const Input = ({
       onBlur={()=>Validation(name)}
       onKeyUp={()=>Validation(name)}
       name={name}
-      className={`border text-black border-black ${style} px-1 py-[.2rem] h-10  rounded-sm w-full`}
+      className={`border text-black border-black ${style} px-1 py-[.2rem] h-10  rounded-md w-full`}
     ></input>
   );
 };

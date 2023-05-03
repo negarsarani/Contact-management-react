@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Input from '../components/input';
-import { formType } from '../types/types';
-import Button from '../components/button';
+import { error, formType } from '../types/types';
+import Button from '../components/Button';
 
-function Form({ setContactList, contactList }: any) {
-  const [err, setErr] = useState<formType>({
+function Form({ setContactList, contactList, edit, SetEdit }: any) {
+  const [err, setErr] = useState<error>({
     firstName: '',
     lastName: '',
     relation: '',
@@ -19,8 +19,10 @@ function Form({ setContactList, contactList }: any) {
     relation: '',
     phone: '',
     email: '',
+    isEdit: false,
   });
-  const Validation = (item) => {
+  const Validation = (item: string) => {
+    // eslint-disable-next-line no-useless-escape
     const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     const regexPhone = /09\d{8}$/;
     const errObj = {
@@ -87,6 +89,23 @@ function Form({ setContactList, contactList }: any) {
     });
   };
 
+  // const handleEdit = () => {
+  if (edit.flag === true) {
+    formObj.id = edit.item.id;
+    formObj.firstName = edit.item.firstName;
+    formObj.lastName = edit.item.lastName;
+    formObj.relation = edit.item.relation;
+    formObj.phone = edit.item.phone;
+    formObj.email = edit.item.email;
+    formObj.isEdit = edit.item.isEdit;
+  }
+
+  //  }
+  // };
+  // edit.flag ? handleEdit() : console.log('aa');
+  // console.log(formObj);
+  // console.log(edit.item.id);
+
   return (
     <div className="w-full flex flex-col items-center justify-center">
       <form
@@ -138,7 +157,7 @@ function Form({ setContactList, contactList }: any) {
             name=""
             id=""
             placeholder="نسبت"
-            className="text-gray-400 w-full border border-black py-[.5rem] rounded-sm px-1 "
+            className="text-gray-400 w-full border border-black py-[.5rem] rounded-md px-1 "
           >
             <option value="" disabled>
               نسبت
@@ -180,11 +199,12 @@ function Form({ setContactList, contactList }: any) {
                 relation: '',
                 phone: '',
                 email: '',
+                isEdit: false,
               });
             }
           }}
         >
-          Add to my contact
+          {edit.flag ? 'Update your cantact' : 'Add to my contact'}
         </Button>
       </form>
     </div>

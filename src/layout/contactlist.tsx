@@ -1,12 +1,9 @@
 import Modal from '../components/Modal';
 import Card from '../components/card';
-import { formType } from '../types/types';
+import { contactlist, formType } from '../types/types';
 import { useState } from 'react';
-type contactlist = {
-  contactList: any;
-  setContactList: React.Dispatch<React.SetStateAction<[]>>;
-};
-function Contactlist({ contactList, setContactList }: contactlist) {
+
+function Contactlist({ contactList, setContactList, SetEdit }: contactlist) {
   const [isOpen, setIsOpen] = useState(false);
   const [activeId, setActiveId] = useState(0);
   const handleDelete = () => {
@@ -22,17 +19,28 @@ function Contactlist({ contactList, setContactList }: contactlist) {
     setActiveId(id);
     setIsOpen(true);
   }
-
   function closeModal() {
     setIsOpen(false);
     setActiveId(0);
   }
+  function findEditObj(id: number) {
+    const [findItem] = contactList.filter((item: formType) => {
+      return item.id === id;
+    });
+    // setContactList(findItem);
 
+    SetEdit({ flag: true, item: findItem });
+  }
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5   items-center justify-center w-8/12 md:w-10/12">
         {contactList.map((item: formType) => (
-          <Card item={item} key={item.id} openModal={openModal} />
+          <Card
+            item={item}
+            key={item.id}
+            openModal={openModal}
+            findEditObj={findEditObj}
+          />
         ))}
       </div>
       <div>
