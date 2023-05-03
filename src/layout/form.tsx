@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Input from '../components/input';
 import { error, formType } from '../types/types';
 import Button from '../components/Button';
@@ -19,59 +19,102 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
     relation: '',
     phone: '',
     email: '',
-    isEdit: false,
   });
+  const [activeObj, setActiveObj] = useState<any>({});  
+  useEffect(() => {
+    
+    if (edit.flag) {
+      setActiveObj(() => {
+        return {
+          id: edit.item.id,
+          firstName: edit.item.firstName,
+          lastName: edit.item.lastName,
+          relation: edit.item.relation,
+          phone: edit.item.phone,
+          email: edit.item.email,
+        };
+      });
+    }
+  }, [edit]);
   const Validation = (item: string) => {
     // eslint-disable-next-line no-useless-escape
     const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    const regexPhone = /09\d{8}$/;
-    const errObj = {
-      firstName: '',
-      lastName: '',
-      relation: '',
-      phone: '',
-      email: '',
-    };
+    const regexPhone = /09\d{9}$/;
+    const object = edit.flag ? activeObj : formObj;
     switch (item) {
       case 'firstName':
-        if (formObj.firstName === '') {
-          errObj.firstName = 'name is reqiuerd';
+        if (object.firstName.trim() === '') {
+          err.firstName = 'نام ضروروی است!';
         } else {
-          formObj.firstName.length < 3
-            ? (errObj.firstName = 'too Short...')
-            : '';
+          if (object.firstName.length < 3) {
+            err.firstName = 'بیشتر 2 کلمه ضروری می باشد';
+          } else {
+            err.firstName = '';
+          }
         }
+        setErr((prev) => {
+          prev = err;
+          return { ...prev };
+        });
         break;
       case 'lastName':
-        if (formObj.lastName === '') {
-          errObj.lastName = 'name is reqiuerd';
+        if (object.lastName.trim() === '') {
+          err.lastName = 'نام خانوادگی ضروری است!';
         } else {
-          formObj.lastName.length < 3 ? (errObj.lastName = 'too Short...') : '';
+          if (object.lastName.length < 3) {
+            err.lastName = 'بیشتر از 2 کلمه ضروری می باشد';
+          } else {
+            err.lastName = '';
+          }
         }
+        setErr((prev) => {
+          prev = err;
+          return { ...prev };
+        });
         break;
 
       case 'email':
-        formObj.email === ''
-          ? (errObj.email = 'Email required!')
-          : !regexEmail.test(formObj.email)
-          ? (errObj.email = 'Email not valid!')
-          : '';
+        if (object.email.trim() === '') {
+          err.email = 'ایمیل ضروری است!';
+        } else if (!regexEmail.test(object.email)) {
+          err.email = 'ایمیل معتیر نیست!';
+        } else {
+          err.email = '';
+        }
+        setErr((prev) => {
+          prev = err;
+          return { ...prev };
+        });
         break;
 
-      case 'phone':
-        !regexPhone.test(formObj.phone)
-          ? (errObj.phone =
-              'phone number should start with 09 and must 11 char')
-          : '';
+        // case 'phone':
+        //   if (!regexPhone.test(object.phone)) {
+        //     err.phone = 'شماره تلفن همراه باید با 09 شروع شود و شامل 11 عدد باشد';
+        //   } else {
+        //     err.phone = '';
+        //   }
+        //   setErr((prev) => {
+        //     prev = err;
+        //     return { ...prev };
+        //   });
+
         break;
       case 'relation':
-        formObj.relation === '' ? (errObj.relation = 'entekhab kon') : '';
+        if (object.relation.trim() === '' || object.relation === 'نسبت' ) {
+          err.relation = 'لطفا یکی از گزینه ها را انتخاب کنید';
+        } else {
+          err.relation = '';
+        }
+        setErr((prev) => {
+          prev = err;
+          return { ...prev };
+        });
 
         break;
       default:
         break;
     }
-    setErr({ ...errObj });
+
     handleError();
   };
   const handleError = () => {
@@ -89,22 +132,19 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
     });
   };
 
-  // const handleEdit = () => {
-  if (edit.flag === true) {
-    formObj.id = edit.item.id;
-    formObj.firstName = edit.item.firstName;
-    formObj.lastName = edit.item.lastName;
-    formObj.relation = edit.item.relation;
-    formObj.phone = edit.item.phone;
-    formObj.email = edit.item.email;
-    formObj.isEdit = edit.item.isEdit;
-  }
-
-  //  }
-  // };
-  // edit.flag ? handleEdit() : console.log('aa');
-  // console.log(formObj);
-  // console.log(edit.item.id);
+  const handleEdit = () => {
+    // const editarr = contactList.map((item: formType) => {
+    //   if (item.id === formObj.id) {
+    //     item = formObj;
+    //   }
+    // });
+    // setContactList(() => [...editarr]);
+    // SetEdit((prev: any) => {
+    //   prev.flag = false;
+    //   prev.item = {};
+    //   return { ...prev };
+    // });
+  };
 
   return (
     <div className="w-full flex flex-col items-center justify-center">
@@ -115,43 +155,62 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
         <div className="flex flex-col w-full">
           <Input
             placeholder="نام..."
-            value={formObj.firstName}
+            value={edit.flag ? activeObj.firstName : formObj.firstName}
             setFormObj={setFormObj}
+            edit={edit}
+            setActiveObj={setActiveObj}
             type="text"
             name={'firstName'}
             Validation={Validation}
+            
           />
           <span className="text-black">{err.firstName} </span>
         </div>
         <div className="flex flex-col w-full">
           <Input
             placeholder="نام خانوادگی..."
-            value={formObj.lastName}
+            value={edit.flag ? activeObj.lastName : formObj.lastName}
             setFormObj={setFormObj}
             type="text"
             name={'lastName'}
             Validation={Validation}
+            edit={edit}
+            setActiveObj={setActiveObj}
           />
           <span className="text-black">{err.lastName}</span>
         </div>
         <div className="flex flex-col w-full">
           <Input
             placeholder="شماره تماس..."
-            value={formObj.phone}
+            value={edit.flag ? activeObj.phone : formObj.phone}
             setFormObj={setFormObj}
             type="text"
             name={'phone'}
             Validation={Validation}
+            edit={edit}
+            setActiveObj={setActiveObj}
           />
           <span className="text-black">{err.phone}</span>
         </div>
         <div className="flex flex-col w-full">
           <select
-            value={formObj.relation}
-            onChange={(e) =>
-              setFormObj((prev) => {
-                return { ...prev, relation: e.target.value };
-              })
+            value={edit.flag ? activeObj.relation : formObj.relation}
+            onChange={
+              (e) => {
+                if (edit.flag) {
+                  setActiveObj((prev) => {
+                    prev.relation = e.target.value;
+                    return { ...prev };
+                  });
+                } else {
+                  setFormObj((prev: formType) => {
+                    return { ...prev, relation: e.target.value };
+                  });
+                }
+              }
+              // setFormObj((prev) => {
+              //   return { ...prev, relation: e.target.value };
+              // })
             }
             onClick={Validation}
             name=""
@@ -173,11 +232,13 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
         <div className="flex flex-col w-full">
           <Input
             placeholder="ایمیل"
-            value={formObj.email}
+            value={edit.flag ? activeObj.email : formObj.email}
             setFormObj={setFormObj}
             type="text"
             name={'email'}
             Validation={Validation}
+            edit={edit}
+            setActiveObj={setActiveObj}
           />
         </div>
         <span className="text-black">{err.email}</span>
@@ -189,6 +250,20 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
           onClick={(e) => {
             e.preventDefault();
             if (isvalid) {
+              if (edit.flag === true) {
+                handleEdit();
+              } else {
+                setContactList(() => {
+                  return [...contactList, { ...formObj }];
+                });
+              }
+            }
+
+            // if (edit.flag) {
+            //   handleEdit();
+            // }
+            // else {
+            if (isvalid) {
               setContactList(() => {
                 return [...contactList, { ...formObj }];
               });
@@ -199,12 +274,16 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
                 relation: '',
                 phone: '',
                 email: '',
-                isEdit: false,
               });
+              setIsvalid(false);
+            } else {
+              alert('error');
             }
+            // }
+            //
           }}
         >
-          {edit.flag ? 'Update your cantact' : 'Add to my contact'}
+          {edit.flag ? 'ثبت ویرایش' : 'ثبت مخاطب جدید'}
         </Button>
       </form>
     </div>

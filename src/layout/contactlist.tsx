@@ -27,7 +27,6 @@ function Contactlist({ contactList, setContactList, SetEdit }: contactlist) {
     const [findItem] = contactList.filter((item: formType) => {
       return item.id === id;
     });
-    // setContactList(findItem);
 
     SetEdit({ flag: true, item: findItem });
   }

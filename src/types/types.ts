@@ -13,6 +13,8 @@ export interface input {
   setFormObj: any;
   Validation?: any;
   style?: string;
+  edit?:any
+  setActiveObj?:any
 }
 export interface formType {
   id?: number;
@@ -21,7 +23,6 @@ export interface formType {
   relation: string;
   phone: number | string;
   email: string;
-  isEdit: boolean;
 }
 export interface error {
   id?: number;
