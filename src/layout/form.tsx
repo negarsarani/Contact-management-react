@@ -76,7 +76,7 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
         if (object.email.trim() === '') {
           err.email = 'ایمیل ضروری است!';
         } else if (!regexEmail.test(object.email)) {
-          err.email = 'ایمیل معتیر نیست!';
+          err.email = 'ایمیل معتبر نیست!';
         } else {
           err.email = '';
         }
@@ -86,16 +86,16 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
         });
         break;
 
-        // case 'phone':
-        //   if (!regexPhone.test(object.phone)) {
-        //     err.phone = 'شماره تلفن همراه باید با 09 شروع شود و شامل 11 عدد باشد';
-        //   } else {
-        //     err.phone = '';
-        //   }
-        //   setErr((prev) => {
-        //     prev = err;
-        //     return { ...prev };
-        //   });
+      case 'phone':
+        if (!regexPhone.test(object.phone)) {
+          err.phone = 'شماره تلفن همراه باید با 09 شروع شود و شامل 11 عدد باشد';
+        } else {
+          err.phone = '';
+        }
+        setErr((prev) => {
+          prev = err;
+          return { ...prev };
+        });
 
         break;
       case 'relation':
@@ -119,7 +119,20 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
   const handleError = () => {
     const errArray = Object.values(err).map((item) => item === '');
     const formArray = Object.values(formObj).map((item) => item !== '');
-    setIsvalid((prev) => {
+    const activeArray = Object.values(activeObj).map((item) => item !== '');
+    if (edit.flag) {
+      setIsvalid((prev) => {
+        if (
+          errArray.every((item) => item === true) &&
+          activeArray.every((item) => item === true)
+        ) {
+          return (prev = true);
+        } else {
+          return (prev = false);
+        }
+      });
+    }else{
+       setIsvalid((prev) => {
       if (
         errArray.every((item) => item === true) &&
         formArray.every((item) => item === true)
@@ -129,6 +142,8 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
         return (prev = false);
       }
     });
+    }
+   
   };
 
   const handleEdit = () => {
@@ -164,7 +179,7 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
             name={'firstName'}
             Validation={Validation}
           />
-          <span className="text-black">{err.firstName} </span>
+          <span className="text-red-500">{err.firstName} </span>
         </div>
         <div className="flex flex-col w-full">
           <Input
@@ -177,7 +192,7 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
             edit={edit}
             setActiveObj={setActiveObj}
           />
-          <span className="text-black">{err.lastName}</span>
+          <span className="text-red-500">{err.lastName}</span>
         </div>
         <div className="flex flex-col w-full">
           <Input
@@ -190,7 +205,7 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
             edit={edit}
             setActiveObj={setActiveObj}
           />
-          <span className="text-black">{err.phone}</span>
+          <span className="text-red-500">{err.phone}</span>
         </div>
         <div className="flex flex-col w-full">
           <select
@@ -221,7 +236,7 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
             <option value="همکار">همکار</option>
             <option value="فامیل">فامیل</option>
           </select>
-          <span className="text-black">{err.relation}</span>
+          <span className="text-red-500">{err.relation}</span>
         </div>
 
         <div className="flex flex-col w-full">
@@ -235,8 +250,8 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
             edit={edit}
             setActiveObj={setActiveObj}
           />
+        <span className="text-red-500">{err.email}</span>
         </div>
-        <span className="text-black">{err.email}</span>
         <Button
           style={`${
             isvalid ? ` bg-violet-500 text-white` : `bg-gray-400 text-black`
@@ -271,9 +286,10 @@ function Form({ setContactList, contactList, edit, SetEdit }: any) {
                 });
                 setIsvalid(false);
               } else {
-                alert('error');
+                alert('همه ی فیلد ها را پر کیند');
               }
             }
+            setIsvalid(false)
           }}
         >
           {edit.flag ? 'ثبت ویرایش' : 'ثبت مخاطب جدید'}
